@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
+import { Component } from '@sitecloud/components';
 import { Wordpress as Icon } from '@styled-icons/simple-icons/Wordpress';
 
 const Container = styled.div`
@@ -83,7 +84,7 @@ const Detail = styled.div`
   opacity: 0.5;
 `;
 
-const BlogPost = ({ data, ...props }) => {
+const BlogPost: Component<{ data: any }> = ({ data, ...props }) => {
   const createdAt = data && data.date && new Date(data.date);
   return (
     <Container {...props}>
@@ -139,13 +140,13 @@ BlogPost.icon = <Icon size="1rem" />;
 BlogPost.asyncProps = async ({ location, devMode }) => {
   const WP_API_URL = 'https://yourwordpress.com/';
 
-  const slug = !devMode ? location.split('/')[2] : 'example-post';
+  const slug = !devMode ? location!.split('/')[2] : 'example-post';
   const res = await fetch(`${WP_API_URL}/wp-json/wp/v2/posts?slug=${slug}`);
 
   let data = await res.json();
   if (data && data.length) {
     data = await Promise.all(
-      data.map(async (entry) => {
+      data.map(async (entry: any) => {
         if (
           entry._links['wp:featuredmedia'] &&
           entry._links['wp:featuredmedia'][0]

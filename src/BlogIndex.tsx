@@ -1,5 +1,5 @@
 import React from 'react';
-import { EditorTypes, PropTypes } from 'sitecloud-components';
+import { Component, EditorTypes, PropTypes } from '@sitecloud/components';
 import styled from 'styled-components';
 import { Wordpress as Icon } from '@styled-icons/simple-icons/Wordpress';
 
@@ -69,22 +69,34 @@ const PostLink = styled.a`
   }
 `;
 
-const BlogIndex = ({ data, ...props }) => (
+const BlogIndex: Component<{ data: any }> = ({ data, ...props }) => (
   <Container {...props}>
     {data &&
-      data.map(({ slug, title, excerpt, featured }) => (
-        <PostLink href={`/blog/${slug}`}>
-          <Picture>
-            {featured && (
-              <Image
-                src={featured.media_details.sizes.medium_large.source_url}
-              />
-            )}
-          </Picture>
-          <Title dangerouslySetInnerHTML={{ __html: title.rendered }}></Title>
-          <SubTitle dangerouslySetInnerHTML={{ __html: excerpt.rendered }} />
-        </PostLink>
-      ))}
+      data.map(
+        ({
+          slug,
+          title,
+          excerpt,
+          featured
+        }: {
+          slug: string;
+          title: any;
+          excerpt: any;
+          featured: any;
+        }) => (
+          <PostLink href={`/blog/${slug}`}>
+            <Picture>
+              {featured && (
+                <Image
+                  src={featured.media_details.sizes.medium_large.source_url}
+                />
+              )}
+            </Picture>
+            <Title dangerouslySetInnerHTML={{ __html: title.rendered }}></Title>
+            <SubTitle dangerouslySetInnerHTML={{ __html: excerpt.rendered }} />
+          </PostLink>
+        )
+      )}
   </Container>
 );
 
@@ -112,7 +124,7 @@ BlogIndex.asyncProps = async () => {
   const res = await fetch(`${WP_API_URL}/wp-json/wp/v2/posts`);
   let data = await res.json();
   data = await Promise.all(
-    data.map(async (entry) => {
+    data.map(async (entry: any) => {
       if (
         entry._links['wp:featuredmedia'] &&
         entry._links['wp:featuredmedia'][0]

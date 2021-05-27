@@ -1,5 +1,5 @@
-import BlogIndex from './BlogIndex.jsx';
-import BlogPost from './BlogPost.jsx';
+import BlogIndex from './BlogIndex';
+import BlogPost from './BlogPost';
 
 export const components = {
   BlogIndex,
